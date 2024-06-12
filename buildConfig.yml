@@ -1,0 +1,32 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  namespace: c60f49-dev
+  name: 'drupal-prod'
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      namespace: c60f49-dev
+      name: 'drupal:1.3'
+  resources:
+    limits:
+      memory: 4Gi
+    requests:
+      memory: 1Gi
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'drupal-base:1.0'
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/vtechchiragb/drupal-test.git'
+      ref: main
+  trigger:
+    type: GitHub
+    github:
+        secret: RandomNumber
+  runPolicy: Serial
